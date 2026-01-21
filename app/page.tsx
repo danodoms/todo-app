@@ -8,8 +8,11 @@ export default function Home() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  async function handleSubmit(formData: FormData) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
     setIsLoading(true);
+
+    const formData = new FormData(e.currentTarget);
     const username = formData.get("username") as string;
 
     if (!username) {
@@ -31,7 +34,7 @@ export default function Home() {
       <section className="flex flex-col gap-4 p-8 bg-sky-950 rounded-lg">
         <h1>Todo App</h1>
         <p className="tracking-tight opacity-50">Enter username to view your todos</p>
-        <form action={handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
             type="text"
             name="username"
