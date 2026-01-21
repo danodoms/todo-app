@@ -25,7 +25,7 @@ export default async function Home() {
           <input
             type="text"
             name="username"
-            className="p-2 bg-foreground/5 rounded-lg min-w-sm"
+            className="px-4 py-2 bg-foreground/5 rounded-lg min-w-24"
             placeholder="username"
           />
           <button className="w-full bg-sky-500 text-background p-1 rounded-lg tracking-tight" type="submit">
