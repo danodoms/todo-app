@@ -1,18 +1,28 @@
-import { upsertUser } from "@/lib/actions/users";
-import { redirect } from "next/navigation";
+"use client"
 
-export default async function Home() {
+import { upsertUser } from "@/lib/actions/users";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+export default function Home() {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   async function handleSubmit(formData: FormData) {
-    "use server"
+    setIsLoading(true);
     const username = formData.get("username") as string;
 
-    if (!username) return;
+    if (!username) {
+      setIsLoading(false);
+      return;
+    }
 
     const result = await upsertUser(username);
 
     if (result.success && result.data) {
-      redirect(`/todos/${result.data.id}`);
+      router.push(`/todos/${result.data.id}`);
+    } else {
+      setIsLoading(false);
     }
   }
 
@@ -27,9 +37,14 @@ export default async function Home() {
             name="username"
             className="px-4 py-2 bg-foreground/5 rounded-lg min-w-24"
             placeholder="username"
+            disabled={isLoading}
           />
-          <button className="w-full bg-sky-500 text-background p-1 rounded-lg tracking-tight" type="submit">
-            Submit
+          <button
+            className="w-full bg-sky-500 text-background p-1 rounded-lg tracking-tight disabled:opacity-50"
+            type="submit"
+            disabled={isLoading}
+          >
+            {isLoading ? "Loading..." : "Submit"}
           </button>
         </form>
       </section>
